@@ -35,3 +35,9 @@ export const ANSWER: TextStyle = {
 export const ANSWER_WRAPPER: ViewStyle = {
   paddingVertical: spacing.small,
 }
+
+export const CHECK_ANSWER: ViewStyle = {
+  backgroundColor: color.palette.angry,
+  padding: spacing.medium,
+  marginTop: spacing.medium,
+}
