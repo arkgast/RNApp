@@ -1,26 +1,32 @@
 import React, { FunctionComponent as Component } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
+import { ViewStyle, View } from "react-native"
 import { Screen, Text } from "../../components"
 // import { useNavigation } from "@react-navigation/native"
 // import { useStores } from "../models"
-import { color } from "../../theme"
+import { color, spacing } from "../../theme"
 
 const ROOT: ViewStyle = {
+  flex: 1,
+  paddingHorizontal: spacing.large,
   backgroundColor: color.palette.black,
 }
 
+const HEADER_CONTAINER: ViewStyle = {
+  marginTop: spacing.large,
+  marginBottom: spacing.medium,
+}
+
 export const QuestionScreen: Component = observer(function QuestionScreen() {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  // OR
   // const rootStore = useStores()
   
   // Pull in navigation via hook
   // const navigation = useNavigation()
   return (
     <Screen style={ROOT} preset="scroll">
-      <Text preset="header" tx="questionScreen.header" />
+      <View style={HEADER_CONTAINER}>
+        <Text preset="header" tx="questionScreen.header" />
+      </View>
     </Screen>
   )
 })
