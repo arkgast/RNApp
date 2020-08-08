@@ -4,8 +4,9 @@ import { ApiConfig, DEFAULT_API_CONFIG } from "./api-config"
 import * as Types from "./api.types"
 import { QuestionSnapshot } from "../../models"
 import * as uuid from "uuid"
+import { decodeHTMLEntities } from "../../utils/html-decode"
 
-const API_PAGE_SIZE = 50
+const API_PAGE_SIZE = 10
 
 const convertQuestion = (raw: any): QuestionSnapshot => {
   const id = uuid.v1()
@@ -14,9 +15,10 @@ const convertQuestion = (raw: any): QuestionSnapshot => {
     category: raw.category,
     type: raw.type,
     difficulty: raw.difficulty,
-    question: raw.question,
-    correctAnswer: raw.correct_answer,
-    incorrectAnswer: raw.incorrect_answer,
+    question: decodeHTMLEntities(raw.question),
+    correctAnswer: decodeHTMLEntities(raw.correct_answer),
+    incorrectAnswers: raw.incorrect_answers,
+    guess: "",
   }
 }
 
