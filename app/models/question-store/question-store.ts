@@ -1,5 +1,7 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { QuestionModel } from "../question/question"
+import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
+import { QuestionModel, QuestionSnapshot, Question } from "../question/question"
+import { withEnvironment } from "../extensions/with-environment"
+import { GetQuestionsResult } from "../../services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -9,8 +11,28 @@ export const QuestionStoreModel = types
   .props({
     questions: types.optional(types.array(QuestionModel), []),
   })
+  .extend(withEnvironment)
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({
+    saveQuestions: (questionSnapshots: QuestionSnapshot[]) => {
+      const questionModels: Question[] = questionSnapshots.map(questionSnapshot =>
+        QuestionModel.create(questionSnapshot),
+      )
+      self.questions.replace(questionModels)
+    },
+  }))
+  .actions(self => ({
+    // eslint-disable-next-line
+    getQuestions: flow(function*() {
+      const result: GetQuestionsResult = yield self.environment.api.getQuestions()
+
+      if (result.kind === "ok") {
+        self.saveQuestions(result.questions)
+      } else {
+        __DEV__ && console.tron.log(result.kind)
+      }
+    }),
+  }))
 
 /**
   * Un-comment the following to omit model attributes from your snapshots (and from async storage).
